@@ -17,6 +17,7 @@
         "build:web": "npm run build -w @linklens/web",
         "dev": "npm run dev --workspaces --if-present",
         "dev:api": "npm run dev -w @linklens/api",
+        "debug:api": "npm run start:debug -w @linklens/api",
         "dev:web": "npm run dev -w @linklens/web",
         "dev:all": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
         "test": "npm run test --workspaces --if-present",
