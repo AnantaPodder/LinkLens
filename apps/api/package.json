@@ -18,9 +18,10 @@
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
         "clean": "rimraf dist",
-        "db:generate": "prisma generate",
-        "db:migrate": "prisma migrate dev",
-        "db:seed": "prisma db seed"
+        "db:generate": "dotenv -e ../../.env -- prisma generate",
+        "db:pull": "dotenv -e ../../.env -- prisma db pull",
+        "db:migrate": "dotenv -e ../../.env -- prisma migrate dev",
+        "db:seed": "dotenv -e ../../.env -- prisma db seed"
     },
     "dependencies": {
         "@nestjs/common": "^10.0.0",
@@ -62,6 +63,7 @@
         "@types/ua-parser-js": "^0.7.39",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
+        "dotenv-cli": "^10.0.0",
         "eslint": "^8.42.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-prettier": "^5.0.0",
