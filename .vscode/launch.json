@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "autoAttachChildProcesses": true,
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "debug:api"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.js"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+    }
+  ]
+}
