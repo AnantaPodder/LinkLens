@@ -9,7 +9,6 @@ import {
   HttpException,
   HttpCode,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import {
