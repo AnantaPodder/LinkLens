@@ -8,12 +8,6 @@ export class AuthService {
   private readonly log = new Logger(AuthService.name);
   constructor(private usersService: UsersService) {}
 
-  async validatePassword(
-    password: string,
-    hashedPassword: string
-  ): Promise<boolean> {
-    return await bcrypt.compare(password, hashedPassword);
-  }
 
   async generatePasswordHash(password: string): Promise<string> {
     return await bcrypt.hash(password, 10);
