@@ -4,9 +4,14 @@ import React, { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { authService, ApiError } from '@/lib/api';
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -34,6 +39,16 @@ export default function SignUpPage() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
+    if (!formData.firstname.trim()) {
+      newErrors.firstname = 'First name is required';
+    } else if (formData.firstname.length > 50) {
+      newErrors.firstname = 'First name must be less than 50 characters';
+    }
+
+    if (formData.lastname && formData.lastname.length > 50) {
+      newErrors.lastname = 'Last name must be less than 50 characters';
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -42,8 +57,11 @@ export default function SignUpPage() {
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
+    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+      newErrors.password =
+        'Password must contain at least one uppercase letter, one lowercase letter, and one number';
     }
 
     if (!formData.confirmPassword) {
@@ -68,13 +86,37 @@ export default function SignUpPage() {
     setErrors({});
 
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Sign up data:', formData);
-      // Redirect to dashboard or login page after successful signup
+      const response = await authService.register({
+        firstname: formData.firstname,
+        lastname: formData.lastname || undefined,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (response.success) {
+        // Show success message or redirect
+        console.log('Registration successful:', response.data);
+
+        // Redirect to sign-in page with success message
+        router.push(
+          '/sign-in?message=Registration successful! Please sign in.'
+        );
+      }
     } catch (error) {
-      console.error('Sign up error:', error);
-      setErrors({ submit: 'Something went wrong. Please try again.' });
+      console.error('Registration error:', error);
+
+      if (error instanceof ApiError) {
+        if (error.status === 409) {
+          setErrors({ email: 'An account with this email already exists' });
+        } else if (error.errors) {
+          // Handle field-specific errors from server
+          setErrors(error.errors);
+        } else {
+          setErrors({ submit: error.message });
+        }
+      } else {
+        setErrors({ submit: 'Something went wrong. Please try again.' });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -102,6 +144,63 @@ export default function SignUpPage() {
                     <p className="text-sm text-red-700">{errors.submit}</p>
                   </div>
                 )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="firstname"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      id="firstname"
+                      name="firstname"
+                      value={formData.firstname}
+                      onChange={handleInputChange}
+                      placeholder="Enter your first name"
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors ${
+                        errors.firstname
+                          ? 'border-red-300 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                      required
+                    />
+                    {errors.firstname && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.firstname}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="lastname"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      id="lastname"
+                      name="lastname"
+                      value={formData.lastname}
+                      onChange={handleInputChange}
+                      placeholder="Enter your last name"
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors ${
+                        errors.lastname
+                          ? 'border-red-300 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    />
+                    {errors.lastname && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.lastname}
+                      </p>
+                    )}
+                  </div>
+                </div>
 
                 <div>
                   <label

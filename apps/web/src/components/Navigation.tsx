@@ -1,10 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Navigation() {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    setIsMenuOpen(false);
+    router.push('/');
+  };
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
@@ -43,12 +53,21 @@ export default function Navigation() {
             >
               About
             </Link>
-            <Link
-              href="/sign-in"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              Sign In
-            </Link>
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                href="/sign-in"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -114,13 +133,22 @@ export default function Navigation() {
               >
                 About
               </Link>
-              <Link
-                href="/sign-in"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-left"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign In
-              </Link>
+              {isAuthenticated ? (
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium text-left"
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  href="/sign-in"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-left"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
           </div>
         )}

@@ -1,11 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { authService, ApiError } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function SignInPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -13,6 +19,15 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string>('');
+
+  useEffect(() => {
+    // Check for success message from registration
+    const message = searchParams.get('message');
+    if (message) {
+      setSuccessMessage(message);
+    }
+  }, [searchParams]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,15 +71,35 @@ export default function SignInPage() {
 
     setIsLoading(true);
     setErrors({});
+    setSuccessMessage('');
 
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Sign in data:', formData);
-      // Redirect to dashboard after successful signin
+      const response = await authService.login({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (response.success && response.data) {
+        console.log('Login successful:', response.data);
+        // Update auth context with the token
+        login(response.data.accessToken);
+        // Redirect to dashboard after successful signin
+        router.push('/dashboard');
+      }
     } catch (error) {
       console.error('Sign in error:', error);
-      setErrors({ submit: 'Invalid email or password. Please try again.' });
+
+      if (error instanceof ApiError) {
+        if (error.status === 401) {
+          setErrors({ submit: 'Invalid email or password. Please try again.' });
+        } else if (error.errors) {
+          setErrors(error.errors);
+        } else {
+          setErrors({ submit: error.message });
+        }
+      } else {
+        setErrors({ submit: 'Something went wrong. Please try again.' });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -87,6 +122,12 @@ export default function SignInPage() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
+                {successMessage && (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm text-green-700">{successMessage}</p>
+                  </div>
+                )}
+
                 {errors.submit && (
                   <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                     <p className="text-sm text-red-700">{errors.submit}</p>
