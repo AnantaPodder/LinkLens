@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
+import Link from 'next/link';
 
 export default function HomePage() {
   const [url, setUrl] = useState('');
   const [shortUrl, setShortUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [copyButtonText, setCopyButtonText] = useState('Copy');
 
   const handleShorten = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,10 +23,16 @@ export default function HomePage() {
     }, 1000);
   };
 
+  const handleCopyToClipBoard = async () => {
+    await navigator.clipboard.writeText(shortUrl);
+    setCopyButtonText('Copied!');
+    setTimeout(() => setCopyButtonText('Copy'), 2000);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
-      
+
       {/* Hero Section */}
       <main className="flex-1">
         <section className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-20">
@@ -34,13 +42,16 @@ export default function HomePage() {
                 Link<span className="text-blue-600">Lens</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Transform your long URLs into short, trackable links with powerful
-                analytics and insights
+                Transform your long URLs into short, trackable links with
+                powerful analytics and insights
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold text-lg">
+                <Link
+                  href="/sign-up"
+                  className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold text-lg"
+                >
                   Get Started Free
-                </button>
+                </Link>
                 <button className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg hover:bg-blue-50 transition-colors font-semibold text-lg">
                   View Demo
                 </button>
@@ -57,12 +68,12 @@ export default function HomePage() {
                   <input
                     type="url"
                     value={url}
-                    onChange={(e) => setUrl(e.target.value)}
+                    onChange={e => setUrl(e.target.value)}
                     placeholder="Enter your long URL here..."
                     className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                     required
                   />
-                  <button 
+                  <button
                     type="submit"
                     disabled={isLoading}
                     className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
@@ -70,20 +81,24 @@ export default function HomePage() {
                     {isLoading ? 'Shortening...' : 'Shorten'}
                   </button>
                 </div>
-                
+
                 {shortUrl && (
                   <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-green-700 font-medium">Your shortened URL:</p>
-                        <p className="text-lg font-mono text-green-800">{shortUrl}</p>
+                        <p className="text-sm text-green-700 font-medium">
+                          Your shortened URL:
+                        </p>
+                        <p className="text-lg font-mono text-green-800">
+                          {shortUrl}
+                        </p>
                       </div>
-                      <button 
-                        onClick={() => navigator.clipboard.writeText(shortUrl)}
-                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                      <div
+                        onClick={handleCopyToClipBoard}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors hover:cursor-pointer"
                       >
-                        Copy
-                      </button>
+                        {copyButtonText}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -97,7 +112,8 @@ export default function HomePage() {
                     URL Shortening
                   </h3>
                   <p className="text-gray-600">
-                    Create short, memorable links from long URLs with custom aliases
+                    Create short, memorable links from long URLs with custom
+                    aliases
                   </p>
                 </div>
 
@@ -107,7 +123,8 @@ export default function HomePage() {
                     Advanced Analytics
                   </h3>
                   <p className="text-gray-600">
-                    Track clicks, locations, devices, and user behavior in real-time
+                    Track clicks, locations, devices, and user behavior in
+                    real-time
                   </p>
                 </div>
 
@@ -133,14 +150,17 @@ export default function HomePage() {
                 Why Choose LinkLens?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our platform provides everything you need to manage, track, and optimize your links
+                Our platform provides everything you need to manage, track, and
+                optimize your links
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
                 <div className="text-3xl mb-4">⚡</div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">Lightning Fast</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  Lightning Fast
+                </h3>
                 <p className="text-gray-600">
                   Get shortened URLs instantly with our optimized infrastructure
                 </p>
@@ -148,7 +168,9 @@ export default function HomePage() {
 
               <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
                 <div className="text-3xl mb-4">🔒</div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">Secure & Reliable</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  Secure & Reliable
+                </h3>
                 <p className="text-gray-600">
                   Enterprise-grade security with 99.9% uptime guarantee
                 </p>
@@ -156,15 +178,20 @@ export default function HomePage() {
 
               <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
                 <div className="text-3xl mb-4">🌍</div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">Global CDN</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  Global CDN
+                </h3>
                 <p className="text-gray-600">
-                  Fast redirects worldwide with our global content delivery network
+                  Fast redirects worldwide with our global content delivery
+                  network
                 </p>
               </div>
 
               <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
                 <div className="text-3xl mb-4">📱</div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">Mobile Optimized</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  Mobile Optimized
+                </h3>
                 <p className="text-gray-600">
                   Perfect experience on all devices with responsive design
                 </p>
@@ -172,17 +199,23 @@ export default function HomePage() {
 
               <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
                 <div className="text-3xl mb-4">🔄</div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">API Integration</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  API Integration
+                </h3>
                 <p className="text-gray-600">
-                  Powerful REST API for seamless integration with your applications
+                  Powerful REST API for seamless integration with your
+                  applications
                 </p>
               </div>
 
               <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
                 <div className="text-3xl mb-4">💎</div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">Premium Features</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  Premium Features
+                </h3>
                 <p className="text-gray-600">
-                  Advanced features like QR codes, expiry dates, and password protection
+                  Advanced features like QR codes, expiry dates, and password
+                  protection
                 </p>
               </div>
             </div>
@@ -196,7 +229,8 @@ export default function HomePage() {
               Ready to Get Started?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of users who trust LinkLens for their URL shortening needs
+              Join thousands of users who trust LinkLens for their URL
+              shortening needs
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-gray-100 transition-colors font-semibold text-lg">
