@@ -7,6 +7,7 @@ import {
   UsePipes,
   HttpStatus,
   HttpException,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -16,15 +17,26 @@ import {
   RegisterUserSchema,
   RegisterUserResponse,
 } from './dto/register.dto';
+import { JwtService } from '@nestjs/jwt';
+import { LocalAuthGuard } from './local-auth.guard';
+import { JwtPayload } from './dto/jwt-payload.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService
+  ) {}
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
   @Post('login')
-  async login(@Request() req): Promise<any> {
-    return req.user;
+  async login(
+    @Request() req: Request & { user: JwtPayload }
+  ): Promise<{ accessToken: string }> {
+    const payload = { email: req.user.email, sub: req.user.sub };
+    const token = await this.jwtService.signAsync(payload);
+    return { accessToken: token };
   }
 
   @Post('register')
