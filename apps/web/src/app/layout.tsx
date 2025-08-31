@@ -2,6 +2,7 @@ import React from 'react';
 import './globals.css';
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/contexts/AuthContext';
+import TokenExpirationWarning from '@/components/TokenExpirationWarning';
 
 export const metadata: Metadata = {
   title: 'LinkLens - URL Shortener with Analytics',
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <TokenExpirationWarning />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

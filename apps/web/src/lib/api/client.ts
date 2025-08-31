@@ -37,6 +37,21 @@ export class ApiClient {
       const data = await response.json();
 
       if (!response.ok) {
+        // Handle 401 Unauthorized - token expired or invalid
+        if (response.status === 401) {
+          // Remove invalid token and trigger logout
+          this.removeAuthToken();
+
+          // Dispatch custom event to notify AuthContext
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+              new CustomEvent('auth:logout', {
+                detail: { reason: 'token_expired' },
+              })
+            );
+          }
+        }
+
         // Handle HTTP errors
         throw new ApiError(
           data.message || `HTTP ${response.status}: ${response.statusText}`,
@@ -58,7 +73,6 @@ export class ApiClient {
       );
     }
   }
-
   private getAuthToken(): string | null {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('auth_token');

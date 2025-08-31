@@ -8,7 +8,6 @@ export class AuthService {
   private readonly log = new Logger(AuthService.name);
   constructor(private usersService: UsersService) {}
 
-
   async generatePasswordHash(password: string): Promise<string> {
     return await bcrypt.hash(password, 10);
   }
@@ -22,23 +21,23 @@ export class AuthService {
 
   async registerUser(userData: {
     email: string;
-    firstname: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
     password: string;
-  }): Promise<Omit<users, 'passwordhash'>> {
+  }): Promise<Omit<users, 'passwordHash'>> {
     // Hash the password
-    const passwordhash = await this.generatePasswordHash(userData.password);
+    const passwordHash = await this.generatePasswordHash(userData.password);
 
     // Create user via UsersService
     const user = await this.usersService.createUser({
       email: userData.email,
-      firstname: userData.firstname,
-      lastname: userData.lastname,
-      passwordhash,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      passwordHash,
     });
 
     // Return user without password hash
-    const { passwordhash: _, ...secureUser } = user;
+    const { passwordHash: _, ...secureUser } = user;
     return secureUser;
   }
 
@@ -48,18 +47,18 @@ export class AuthService {
   ): Promise<Prisma.usersGetPayload<{
     select: {
       email: true;
-      firstname: true;
+      firstName: true;
       id: true;
-      lastname: true;
-      passwordhash: false;
+      lastName: true;
+      passwordHash: false;
     };
   }> | null> {
     const user = await this.usersService.getUserByEmail(username);
     if (!user) return null;
 
-    const passwordValid = this.validatePasswordHash(pass, user.passwordhash);
+    const passwordValid = this.validatePasswordHash(pass, user.passwordHash);
     if (user && passwordValid) {
-      const { passwordhash, ...secureUser } = user;
+      const { passwordHash: _, ...secureUser } = user;
       return secureUser;
     }
     return null;

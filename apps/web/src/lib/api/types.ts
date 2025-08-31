@@ -8,16 +8,16 @@ export interface ApiResponse<T = any> {
 // Auth Types
 export interface RegisterRequest {
   email: string;
-  firstname: string;
-  lastname?: string;
+  firstName: string;
+  lastName?: string;
   password: string;
 }
 
 export interface RegisterResponse {
   id: number;
   email: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface LoginRequest {
@@ -33,6 +33,6 @@ export interface LoginResponse {
 export interface User {
   id: number;
   email: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
 }
