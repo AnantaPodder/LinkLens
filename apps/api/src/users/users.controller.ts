@@ -11,7 +11,7 @@ export class UsersController {
   @Get('info')
   async getProfile(@Request() req: Request & { user: JwtPayload }) {
     const user = await this.usersService.getUserById(req.user.sub);
-    const { passwordhash, ...userWithoutPassword } = user;
+    const { passwordHash, ...userWithoutPassword } = user;
     return { user: userWithoutPassword };
   }
 }

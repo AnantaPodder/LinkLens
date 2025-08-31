@@ -22,9 +22,9 @@ export class UsersService {
 
   async createUser(userData: {
     email: string;
-    firstname: string;
-    lastname: string;
-    passwordhash: string;
+    firstName: string;
+    lastName: string;
+    passwordHash: string;
   }): Promise<users> {
     // Check if user already exists
     const existingUser = await this.getUserByEmail(userData.email);

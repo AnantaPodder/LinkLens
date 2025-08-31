@@ -2,11 +2,11 @@ import { z } from 'zod';
 
 export const RegisterUserSchema = z.object({
   email: z.string().email('Invalid email format').min(1, 'Email is required'),
-  firstname: z
+  firstName: z
     .string()
     .min(1, 'First name is required')
     .max(50, 'First name must be less than 50 characters'),
-  lastname: z
+  lastName: z
     .string()
     .max(50, 'Last name must be less than 50 characters')
     .optional()
@@ -22,8 +22,8 @@ export const RegisterUserSchema = z.object({
 
 export type RegisterUserDto = {
   email: string;
-  firstname: string;
-  lastname?: string;
+  firstName: string;
+  lastName?: string;
   password: string;
 };
 
@@ -32,8 +32,8 @@ export const RegisterUserResponseSchema = z.object({
   data: z.object({
     id: z.number(),
     email: z.string(),
-    firstname: z.string(),
-    lastname: z.string().nullable(),
+    firstName: z.string(),
+    lastName: z.string().nullable(),
   }),
   message: z.string(),
 });

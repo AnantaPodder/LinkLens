@@ -5,10 +5,14 @@ import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAutoLogout } from '@/hooks';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
+
+  // Handle automatic logout and redirection
+  useAutoLogout();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {

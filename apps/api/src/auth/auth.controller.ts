@@ -46,8 +46,8 @@ export class AuthController {
     try {
       const user = await this.authService.registerUser({
         email: userData.email,
-        firstname: userData.firstname,
-        lastname: userData.lastname || '',
+        firstName: userData.firstName,
+        lastName: userData.lastName || '',
         password: userData.password,
       });
 
@@ -56,8 +56,8 @@ export class AuthController {
         data: {
           id: user.id,
           email: user.email,
-          firstname: user.firstname,
-          lastname: user.lastname,
+          firstName: user.firstName,
+          lastName: user.lastName,
         },
         message: 'User registered successfully',
       };

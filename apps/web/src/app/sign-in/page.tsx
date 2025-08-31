@@ -22,7 +22,7 @@ export default function SignInPage() {
   const [successMessage, setSuccessMessage] = useState<string>('');
 
   useEffect(() => {
-    // Check for success message from registration
+    // Check for success message from registration or logout
     const message = searchParams.get('message');
     if (message) {
       setSuccessMessage(message);
