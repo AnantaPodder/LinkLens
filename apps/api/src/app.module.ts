@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { LinkModule } from './link/link.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     UsersModule,
     PrismaModule,
     DashboardModule,
+    LinkModule,
   ],
   controllers: [],
   providers: [],

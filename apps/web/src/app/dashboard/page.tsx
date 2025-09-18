@@ -6,6 +6,8 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAutoLogout } from '@/hooks';
+import ShortenUrl from '@/components/links/ShortenUrl';
+import LinkStateData from '@/components/links/LinkState';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -49,41 +51,8 @@ export default function DashboardPage() {
                   </h1>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-blue-50 p-6 rounded-lg">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Total Links
-                    </h3>
-                    <p className="text-3xl font-bold text-blue-600">0</p>
-                  </div>
-                  <div className="bg-green-50 p-6 rounded-lg">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Total Clicks
-                    </h3>
-                    <p className="text-3xl font-bold text-green-600">0</p>
-                  </div>
-                  <div className="bg-purple-50 p-6 rounded-lg">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      This Month
-                    </h3>
-                    <p className="text-3xl font-bold text-purple-600">0</p>
-                  </div>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                    Welcome to LinkLens!
-                  </h2>
-                  <p className="text-gray-600 mb-4">
-                    You've successfully logged in to your dashboard. Here you
-                    can manage your shortened URLs, view analytics, and more.
-                  </p>
-                  <p className="text-gray-600">
-                    This is a protected page that requires authentication. The
-                    integration between the frontend and backend is working
-                    correctly!
-                  </p>
-                </div>
+                <LinkStateData />
+                <ShortenUrl />
               </div>
             </div>
           </div>

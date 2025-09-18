@@ -18,7 +18,7 @@ model users {
 }
 
 model links {
-  id           Int          @id(map: "links_pk")
+  id           Int          @id(map: "links_pk") @default(autoincrement())
   url          String       @db.VarChar
   shortenedUrl String       @unique(map: "links_unique") @map("shortenedurl") @db.VarChar
   createdAt    DateTime     @default(now()) @map("createdat") @db.Timestamptz(6)
