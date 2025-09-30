@@ -28,6 +28,7 @@
         "clean": "npm run clean --workspaces --if-present",
         "db:generate": "npm run db:generate -w @linklens/api",
         "db:pull": "npm run db:pull -w @linklens/api",
+        "db:push": "npm run db:push -w @linklens/api",
         "db:migrate": "npm run db:migrate -w @linklens/api",
         "db:seed": "npm run db:seed -w @linklens/api",
         "start:api": "npm run start -w @linklens/api",

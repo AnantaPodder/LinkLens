@@ -20,6 +20,7 @@
         "clean": "rimraf dist",
         "db:generate": "dotenv -e ../../.env -- prisma generate",
         "db:pull": "dotenv -e ../../.env -- prisma db pull",
+        "db:push": "dotenv -e ../../.env -- prisma db push",
         "db:migrate": "dotenv -e ../../.env -- prisma migrate dev",
         "db:seed": "dotenv -e ../../.env -- prisma db seed"
     },
