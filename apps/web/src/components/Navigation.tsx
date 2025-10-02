@@ -42,6 +42,12 @@ export default function Navigation() {
               Dashboard
             </Link>
             <Link
+              href="/links"
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Links
+            </Link>
+            <Link
               href="/analytics"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >

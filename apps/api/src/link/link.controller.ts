@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { JwtPayload } from '@/auth/dto/jwt-payload.dto';
 import { LinkService } from './link.service';
+import { LinkResponse } from './dtos/link-response.dto';
 
 @Controller('links')
 @UseGuards(JwtAuthGuard)
@@ -16,7 +17,9 @@ export class LinkController {
   constructor(private readonly linkService: LinkService) {}
 
   @Get('')
-  async getAllUrls(@Request() req: Request & { user: JwtPayload }) {
+  async getAllUrls(
+    @Request() req: Request & { user: JwtPayload }
+  ): Promise<LinkResponse[]> {
     return this.linkService.getAllByUserId(req.user.sub);
   }
 
