@@ -64,5 +64,8 @@
         "monorepo"
     ],
     "author": "Your Name",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "@tanstack/react-table": "^8.21.3"
+    }
 }

@@ -1,13 +1,24 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { links } from 'prisma/generated';
+import { LinkResponse } from './dtos/link-response.dto';
 
 @Injectable()
 export class LinkService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAllByUserId(userId: number) {
+  async getAllByUserId(userId: number): Promise<LinkResponse[]> {
     const linksByUser = await this.prisma.links.findMany({ where: { userId } });
+    linksByUser.map(r => {
+      return {
+        id: r.id,
+        createdAt: r.createdAt,
+        deleted: r.deleted,
+        shortenedUrl: r.shortenedUrl,
+        url: r.url,
+        userId: r.userId,
+      } as LinkResponse;
+    });
     return linksByUser;
   }
 
