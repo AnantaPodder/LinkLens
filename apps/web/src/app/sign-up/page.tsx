@@ -10,8 +10,8 @@ import { authService, ApiError } from '@/lib/api';
 export default function SignUpPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -39,14 +39,14 @@ export default function SignUpPage() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.firstname.trim()) {
-      newErrors.firstname = 'First name is required';
-    } else if (formData.firstname.length > 50) {
-      newErrors.firstname = 'First name must be less than 50 characters';
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    } else if (formData.firstName.length > 50) {
+      newErrors.firstName = 'First name must be less than 50 characters';
     }
 
-    if (formData.lastname && formData.lastname.length > 50) {
-      newErrors.lastname = 'Last name must be less than 50 characters';
+    if (formData.lastName && formData.lastName.length > 50) {
+      newErrors.lastName = 'Last name must be less than 50 characters';
     }
 
     if (!formData.email.trim()) {
@@ -87,8 +87,8 @@ export default function SignUpPage() {
 
     try {
       const response = await authService.register({
-        firstname: formData.firstname,
-        lastname: formData.lastname || undefined,
+        firstName: formData.firstName,
+        lastName: formData.lastName || undefined,
         email: formData.email,
         password: formData.password,
       });
@@ -155,13 +155,13 @@ export default function SignUpPage() {
                     </label>
                     <input
                       type="text"
-                      id="firstname"
-                      name="firstname"
-                      value={formData.firstname}
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
                       onChange={handleInputChange}
                       placeholder="Enter your first name"
                       className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors ${
-                        errors.firstname
+                        errors.firstName
                           ? 'border-red-300 bg-red-50'
                           : 'border-gray-300'
                       }`}
@@ -183,20 +183,20 @@ export default function SignUpPage() {
                     </label>
                     <input
                       type="text"
-                      id="lastname"
-                      name="lastname"
-                      value={formData.lastname}
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
                       onChange={handleInputChange}
                       placeholder="Enter your last name"
                       className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors ${
-                        errors.lastname
+                        errors.lastName
                           ? 'border-red-300 bg-red-50'
                           : 'border-gray-300'
                       }`}
                     />
-                    {errors.lastname && (
+                    {errors.lastName && (
                       <p className="mt-1 text-sm text-red-600">
-                        {errors.lastname}
+                        {errors.lastName}
                       </p>
                     )}
                   </div>
